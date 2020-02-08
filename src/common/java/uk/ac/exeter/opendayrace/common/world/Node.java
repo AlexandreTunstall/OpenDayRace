@@ -1,4 +1,4 @@
-package uk.ac.exeter.opendayrace.world;
+package uk.ac.exeter.opendayrace.common.world;
 
 import java.util.ArrayList;
 import java.util.List;

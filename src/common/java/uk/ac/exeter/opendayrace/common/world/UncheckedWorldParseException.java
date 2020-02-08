@@ -1,4 +1,4 @@
-package uk.ac.exeter.opendayrace.world;
+package uk.ac.exeter.opendayrace.common.world;
 
 /**
  * Because throwing checked exceptions inside streams is a nightmare

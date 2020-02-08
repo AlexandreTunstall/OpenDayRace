@@ -1,4 +1,4 @@
-package uk.ac.exeter.opendayrace.world;
+package uk.ac.exeter.opendayrace.common.world;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

@@ -1,4 +1,4 @@
-package uk.ac.exeter.opendayrace.ui;
+package uk.ac.exeter.opendayrace.client.ui;
 
 import javax.swing.*;
 import java.awt.*;
