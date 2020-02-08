@@ -40,8 +40,8 @@ sourceSets {
 }
 
 dependencies {
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:28.1-jre'
+    implementation sourceSets.common.output
+    serverImplementation sourceSets.common.output
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
