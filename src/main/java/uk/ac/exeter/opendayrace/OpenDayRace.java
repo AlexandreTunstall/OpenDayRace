@@ -7,6 +7,11 @@ import uk.ac.exeter.opendayrace.ui.Renderer;
 
 public class OpenDayRace {
     public static void main(String[] args) {
-        new Renderer();
+        // Enable hardware acceleration
+        System.setProperty("sun.java2d.opengl", "true");
+        Renderer r = new Renderer();
+        while (true) {
+            r.run();
+        }
     }
 }
