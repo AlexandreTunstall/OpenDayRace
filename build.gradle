@@ -20,6 +20,25 @@ repositories {
     jcenter()
 }
 
+sourceSets {
+    common {
+        java {
+            srcDirs = ["src/common/java"]
+        }
+        resources {
+            srcDirs = ["src/common/resources"]
+        }
+    }
+    server {
+        java {
+            srcDirs = ["src/server/java"]
+        }
+        resources {
+            srcDirs = ["src/server/resources"]
+        }
+    }
+}
+
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.1-jre'
@@ -32,3 +51,6 @@ application {
     // Define the main class for the application.
     mainClassName = 'uk.ac.exeter.opendayrace.App'
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
