@@ -3,12 +3,10 @@
  */
 package uk.ac.exeter.opendayrace;
 
-public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
+import uk.ac.exeter.opendayrace.ui.Renderer;
 
+public class OpenDayRace {
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        new Renderer();
     }
 }
