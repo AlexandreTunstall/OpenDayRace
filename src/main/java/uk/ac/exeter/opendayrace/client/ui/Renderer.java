@@ -5,7 +5,6 @@ import uk.ac.exeter.opendayrace.common.world.World;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.StrokeBorder;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
@@ -105,10 +104,6 @@ public class Renderer implements Runnable {
     }
 
     private void drawImage(Image img, double x, double y, double w, double h) {
-        System.out.println("x" + x);
-        System.out.println("y" + y);
-        System.out.println("w" + w);
-        System.out.println("h" + h);
         AffineTransform at = new AffineTransform(w / img.getWidth(null), 0, 0, h / img.getHeight(null),
                 x, y);
         g.drawImage(img, at, null);
