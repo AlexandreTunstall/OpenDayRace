@@ -2,7 +2,6 @@ package uk.ac.exeter.opendayrace.server;
 
 import uk.ac.exeter.opendayrace.common.world.WorldPath;
 
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
@@ -70,7 +69,6 @@ public class GameManager implements Runnable, AutoCloseable {
                     }
                 }
             }
-            // TODO Handle path logic and send message to clients
             int left_1_players = 0;
             int left_2_players = 0;
             int right_1_players = 0;
@@ -94,8 +92,23 @@ public class GameManager implements Runnable, AutoCloseable {
             int left_right_time = left_1_players / WEIGHTED_PATH_WEIGHT + right_2_players / WEIGHTED_PATH_WEIGHT;
             int right_right_time = FIXED_TIME_PATH_TIME + right_2_players / WEIGHTED_PATH_WEIGHT;
             int right_left_time = FIXED_TIME_PATH_TIME + FIXED_TIME_PATH_TIME;
-
-            // Don't know how to send response to client as time needed in response
+            // Let the players know of their mistakes
+            for (ClientConnection player : players) {
+                switch (player.selectedPath) {
+                    case LEFT_LEFT:
+                        player.onTimeCalculated(left_left_time);
+                        break;
+                    case LEFT_RIGHT:
+                        player.onTimeCalculated(left_right_time);
+                        break;
+                    case RIGHT_LEFT:
+                        player.onTimeCalculated(right_left_time);
+                        break;
+                    case RIGHT_RIGHT:
+                        player.onTimeCalculated(right_right_time);
+                        break;
+                }
+            }
         }
     }
 
