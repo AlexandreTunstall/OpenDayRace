@@ -26,6 +26,8 @@ public class Renderer implements Runnable {
 
     private BufferedImage background;
 
+    private int pathTime;
+
     public Renderer() throws IOException {
         frame = new JFrame("Open Day Race");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,7 +49,7 @@ public class Renderer implements Runnable {
 
         insets = frame.getInsets();
 
-        background = ImageIO.read(new File("resources/testimage.jpg"));
+        background = ImageIO.read(new File("resources/background.png"));
     }
 
     @Override
@@ -125,6 +127,10 @@ public class Renderer implements Runnable {
         g.transform(transform);
         layout.draw(g, 0F, 0F);
         g.setTransform(original);
+    }
+
+    public void setPathTime(int pathTime) {
+        this.pathTime = pathTime;
     }
 
     protected static final int TOP_LEFT = 0;

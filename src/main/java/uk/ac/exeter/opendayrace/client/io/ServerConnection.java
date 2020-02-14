@@ -13,6 +13,7 @@ public class ServerConnection {
 
     private final SocketChannel socket;
     private final ByteBuffer buffer;
+    private boolean expectTime;
 
     public ServerConnection(InetSocketAddress address) throws IOException {
         socket = SocketChannel.open(address);
@@ -29,6 +30,11 @@ public class ServerConnection {
         byte status = buffer.get();
         if (status < 0) {
             throw new IOException("Server sent failure status code: " + status);
+        }
+        if (expectTime) {
+
+            expectTime = false;
+            return;
         }
         // TODO Set state based on status code
     }
