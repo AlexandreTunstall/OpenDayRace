@@ -32,6 +32,8 @@ public class World {
         }
     }
 
+    public Node[] getNodes() { return nodes; }
+
     private static class NodeBuilder {
         private final Node node;
         private final int[] connections;

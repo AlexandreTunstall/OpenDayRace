@@ -1,10 +1,15 @@
 package uk.ac.exeter.opendayrace.client.ui;
 
+import uk.ac.exeter.opendayrace.common.world.Node;
+import uk.ac.exeter.opendayrace.common.world.World;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.StrokeBorder;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -23,9 +28,13 @@ public class Renderer implements Runnable {
     private long[] lastTime = new long[60];
     private int timeIndex;
 
+    private World world;
+
+    private BasicStroke thiccboi = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 10);
+
     private BufferedImage background;
 
-    public Renderer() throws IOException {
+    public Renderer(World world) throws IOException {
         frame = new JFrame("Open Day Race");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIgnoreRepaint(true);
@@ -47,6 +56,8 @@ public class Renderer implements Runnable {
         insets = frame.getInsets();
 
         background = ImageIO.read(Renderer.class.getResourceAsStream("/uk/ac/exeter/opendayrace/client/background.png"));
+
+        this.world = world;
     }
 
     @Override
@@ -74,8 +85,14 @@ public class Renderer implements Runnable {
 
     private void drawBackground() {
         //g.setColor(Color.BLACK);
-        double scalefactor = Math.min(fw / background.getWidth(null), fh / background.getHeight(null));
-        drawImage(background, (scalefactor * fw - fw) / 2, (scalefactor * fh - fh) / 2, scalefactor * fw, scalefactor * fh);
+        int bw = background.getWidth(), bh = background.getHeight();
+        double scalefactor = Math.min(fw / bw, fh / bh);
+        double transform = scalefactor - 1;
+        double dx = transform * fw / 2, dy = transform * fh / 2, dw = scalefactor * fw, dh = scalefactor * fh;
+        drawImage(background, dx, dy, dw, dh);
+        for (Node n : world.getNodes()) {
+            drawNode(n, dx, dy, dw / bw, dh / bh);
+        }
         //g.fillRect(0, 0, fw, fh);
     }
 
@@ -88,6 +105,10 @@ public class Renderer implements Runnable {
     }
 
     private void drawImage(Image img, double x, double y, double w, double h) {
+        System.out.println("x" + x);
+        System.out.println("y" + y);
+        System.out.println("w" + w);
+        System.out.println("h" + h);
         AffineTransform at = new AffineTransform(w / img.getWidth(null), 0, 0, h / img.getHeight(null),
                 x, y);
         g.drawImage(img, at, null);
@@ -105,6 +126,19 @@ public class Renderer implements Runnable {
         g.transform(transform);
         layout.draw(g, 0F, 0F);
         g.setTransform(original);
+    }
+
+    private void drawNode(Node node, double dx, double dy, double dw, double dh) {
+        int radius = 30;
+        Shape circle = new Ellipse2D.Double(node.getX1() * dw - radius + dx, node.getY1() * dh - radius + dy, 2.0 * radius, 2.0 * radius);
+        Shape circle2 = new Ellipse2D.Double(node.getX2() * dw - radius + dx, node.getY2() * dh - radius + dy, 2.0 * radius, 2.0 * radius);
+        g.setColor(Color.WHITE);
+        g.fill(circle);
+        g.fill(circle2);
+        g.setColor(Color.GRAY);
+        g.setStroke(thiccboi);
+        g.draw(circle);
+        g.draw(circle2);
     }
 
     private void drawAlignedString(String string, double x, double y, double h, int alignment) {

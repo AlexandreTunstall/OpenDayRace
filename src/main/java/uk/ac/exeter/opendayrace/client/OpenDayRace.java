@@ -4,6 +4,8 @@
 package uk.ac.exeter.opendayrace.client;
 
 import uk.ac.exeter.opendayrace.client.ui.Renderer;
+import uk.ac.exeter.opendayrace.common.world.World;
+import uk.ac.exeter.opendayrace.common.world.Node;
 
 import java.io.IOException;
 
@@ -11,9 +13,17 @@ public class OpenDayRace {
     public static void main(String[] args) {
         // Enable hardware acceleration
         System.setProperty("sun.java2d.opengl", "true");
+        int[][] points = {{152, 303, 645, 237}, {487, 673, 722, 585}, {645, 237, 1320, 273}, {722, 585, 1260, 590}};
+        Node[] nodes = new Node[4];
+        int i = 0;
+        for (int[] node : points) {
+            nodes[i] = new Node(node[0], node[1], node[2], node[3]);
+            i++;
+        }
+        World world = new World(nodes);
         Renderer r = null;
         try {
-            r = new Renderer();
+            r = new Renderer(world);
         } catch (IOException e) {
             e.printStackTrace();
             return;
