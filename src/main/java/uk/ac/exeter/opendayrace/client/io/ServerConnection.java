@@ -13,7 +13,7 @@ public class ServerConnection {
 
     private final SocketChannel socket;
     private final ByteBuffer buffer;
-    private boolean expectTime;
+    private boolean expectTime = false;
 
     public ServerConnection(InetSocketAddress address) throws IOException {
         socket = SocketChannel.open(address);
