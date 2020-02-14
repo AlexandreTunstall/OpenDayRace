@@ -18,8 +18,6 @@ public class NetworkConstants {
     public static final byte PATH_RIGHT_LEFT = 7;
     public static final byte PATH_RIGHT_RIGHT = 8;
 
-    public static final byte STATUS_PATH_TIME = 9;
-
     // Prevent instantiation
     private NetworkConstants() {}
 }

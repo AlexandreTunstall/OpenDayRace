@@ -78,6 +78,12 @@ public class ClientConnection implements AutoCloseable {
         socket.write(writeBuffer, next, ensureWrite);
     }
 
+    private void sendInt(int time, Runnable next) {
+        writeBuffer.putInt(time);
+        writeBuffer.flip();
+        socket.write(writeBuffer, next, ensureWrite);
+    }
+
     private void addPlayer() {
         game.addPlayer(this);
     }
@@ -94,6 +100,10 @@ public class ClientConnection implements AutoCloseable {
     public void onGameReady() {
         selectedPath = null;
         sendStatus(STATUS_AWAITING_SELECTION, this::readSelection);
+    }
+
+    public void onTimeCalculated(int time) {
+        sendStatus(STATUS_SHOW_PATHS, () -> sendInt(time, () -> {}));
     }
 
     @Override
