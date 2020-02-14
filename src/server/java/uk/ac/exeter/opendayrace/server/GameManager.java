@@ -95,6 +95,7 @@ public class GameManager implements Runnable, AutoCloseable {
             int right_right_time = FIXED_TIME_PATH_TIME + right_2_players / WEIGHTED_PATH_WEIGHT;
             int right_left_time = FIXED_TIME_PATH_TIME + FIXED_TIME_PATH_TIME;
 
+            // Don't know how to send response to client as time needed in response
         }
     }
 

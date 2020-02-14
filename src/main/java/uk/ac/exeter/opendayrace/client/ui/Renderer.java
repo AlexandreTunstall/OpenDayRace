@@ -1,11 +1,15 @@
 package uk.ac.exeter.opendayrace.client.ui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
@@ -20,7 +24,9 @@ public class Renderer implements Runnable {
     private long[] lastTime = new long[60];
     private int timeIndex;
 
-    public Renderer() {
+    private BufferedImage background;
+
+    public Renderer() throws IOException {
         frame = new JFrame("Open Day Race");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIgnoreRepaint(true);
@@ -40,6 +46,8 @@ public class Renderer implements Runnable {
         GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 
         insets = frame.getInsets();
+
+        background = ImageIO.read(new File("resources/testimage.jpg"));
     }
 
     @Override
@@ -66,8 +74,10 @@ public class Renderer implements Runnable {
     }
 
     private void drawBackground() {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, fw, fh);
+        //g.setColor(Color.BLACK);
+        double scalefactor = Math.min(fw / background.getWidth(null), fh / background.getHeight(null));
+        drawImage(background, (scalefactor * fw - fw) / 2, (scalefactor * fh - fh) / 2, scalefactor * fw, scalefactor * fh);
+        //g.fillRect(0, 0, fw, fh);
     }
 
     private void drawFPS(long time) {
