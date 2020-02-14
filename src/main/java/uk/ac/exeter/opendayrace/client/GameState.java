@@ -20,6 +20,7 @@ public class GameState {
         nodes[2] = new Node(645, 237, 1320, 273);
         nodes[3] = new Node(722, 585, 1260, 590);
         world = new World(nodes);
+        state = State.CONNECTING;
     }
 
     public void setConnecting() {
@@ -48,7 +49,15 @@ public class GameState {
         return world;
     }
 
-    enum State {
+    public State getState() {
+        return state;
+    }
+
+    public int getTravelTime() {
+        return travelTime;
+    }
+
+    public enum State {
         /**
          * Connecting to the server
          */

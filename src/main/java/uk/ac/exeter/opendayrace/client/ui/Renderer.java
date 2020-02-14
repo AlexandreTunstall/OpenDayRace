@@ -72,6 +72,7 @@ public class Renderer implements Runnable {
             g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
             this.g = g;
             drawBackground();
+            drawPopup();
             drawFPS(time);
         } finally {
             if (rawGraphics != null) {
@@ -93,7 +94,25 @@ public class Renderer implements Runnable {
     }
 
     private void drawPopup() {
-
+        String popupText = null;
+        switch (game.getState()) {
+            case CONNECTING:
+                popupText = "Connecting...";
+                break;
+            case AWAITING_SELECTION:
+                popupText = "Hello there.";
+                return;
+            case WAITING_FOR_PLAYERS:
+                popupText = "Waiting for other players...";
+                break;
+            case DISPLAYING_TIME:
+                popupText = "The path you chose took you " + game.getTravelTime() + " minutes";
+                break;
+        }
+        g.setColor(new Color(0, 0, 0, 191));
+        g.fill(new Rectangle2D.Double(0, 0, fw, fh));
+        g.setColor(new Color(0xb2, 0xc8, 0xd5));
+        drawBoundedString(popupText, fw * 3d / 10d, fh * 3d / 10d, fw * 2d / 5d, fh * 2d / 5d);
     }
 
     private void drawFPS(long time) {
