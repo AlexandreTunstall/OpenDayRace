@@ -8,7 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
@@ -25,8 +24,6 @@ public class Renderer implements Runnable {
     private int timeIndex;
 
     private BufferedImage background;
-
-    private int pathTime;
 
     public Renderer() throws IOException {
         frame = new JFrame("Open Day Race");
@@ -49,7 +46,7 @@ public class Renderer implements Runnable {
 
         insets = frame.getInsets();
 
-        background = ImageIO.read(new File("resources/background.png"));
+        background = ImageIO.read(Renderer.class.getResourceAsStream("/uk/ac/exeter/opendayrace/client/background.png"));
     }
 
     @Override
@@ -127,10 +124,6 @@ public class Renderer implements Runnable {
         g.transform(transform);
         layout.draw(g, 0F, 0F);
         g.setTransform(original);
-    }
-
-    public void setPathTime(int pathTime) {
-        this.pathTime = pathTime;
     }
 
     protected static final int TOP_LEFT = 0;
