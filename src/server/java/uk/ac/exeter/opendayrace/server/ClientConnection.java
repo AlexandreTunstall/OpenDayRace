@@ -103,7 +103,7 @@ public class ClientConnection implements AutoCloseable {
     }
 
     public void onTimeCalculated(int time) {
-        sendStatus(STATUS_PATH_TIME, () -> sendInt(time, () -> {}));
+        sendStatus(STATUS_SHOW_PATHS, () -> sendInt(time, () -> {}));
     }
 
     @Override
