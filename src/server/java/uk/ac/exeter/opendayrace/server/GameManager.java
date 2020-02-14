@@ -1,5 +1,8 @@
 package uk.ac.exeter.opendayrace.server;
 
+import uk.ac.exeter.opendayrace.common.world.WorldPath;
+
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
@@ -68,6 +71,30 @@ public class GameManager implements Runnable, AutoCloseable {
                 }
             }
             // TODO Handle path logic and send message to clients
+            int left_1_players = 0;
+            int left_2_players = 0;
+            int right_1_players = 0;
+            int right_2_players = 0;
+            for (ClientConnection player : players) {
+                if (player.selectedPath == WorldPath.LEFT_LEFT || player.selectedPath == WorldPath.LEFT_RIGHT) {
+                    left_1_players++;
+                } else {
+                    right_1_players++;
+                }
+                if (player.selectedPath == WorldPath.LEFT_LEFT || player.selectedPath == WorldPath.RIGHT_LEFT) {
+                    left_2_players++;
+                } else {
+                    right_2_players++;
+                }
+            }
+            int FIXED_TIME_PATH_TIME = 45;
+            int WEIGHTED_PATH_WEIGHT = 2;
+            // Calculate path times
+            int left_left_time = left_1_players / WEIGHTED_PATH_WEIGHT + FIXED_TIME_PATH_TIME;
+            int left_right_time = left_1_players / WEIGHTED_PATH_WEIGHT + right_2_players / WEIGHTED_PATH_WEIGHT;
+            int right_right_time = FIXED_TIME_PATH_TIME + right_2_players / WEIGHTED_PATH_WEIGHT;
+            int right_left_time = FIXED_TIME_PATH_TIME + FIXED_TIME_PATH_TIME;
+
         }
     }
 

@@ -34,4 +34,6 @@ public class Node {
     public void addConnection(Node node) {
         connectedNodes.add(node);
     }
+
+    public List<Node> getConnectedNodes() { return connectedNodes; }
 }
