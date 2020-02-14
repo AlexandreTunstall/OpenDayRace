@@ -8,7 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
@@ -47,7 +46,7 @@ public class Renderer implements Runnable {
 
         insets = frame.getInsets();
 
-        background = ImageIO.read(new File("resources/testimage.jpg"));
+        background = ImageIO.read(Renderer.class.getResourceAsStream("/uk/ac/exeter/opendayrace/client/background.png"));
     }
 
     @Override
