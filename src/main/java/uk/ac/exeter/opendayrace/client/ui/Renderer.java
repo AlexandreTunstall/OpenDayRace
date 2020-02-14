@@ -1,7 +1,7 @@
 package uk.ac.exeter.opendayrace.client.ui;
 
+import uk.ac.exeter.opendayrace.client.GameState;
 import uk.ac.exeter.opendayrace.common.world.Node;
-import uk.ac.exeter.opendayrace.common.world.World;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,6 +18,8 @@ import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 
 public class Renderer implements Runnable {
+    private final GameState game;
+
     private JFrame frame;
     private Insets insets;
 
@@ -27,13 +29,12 @@ public class Renderer implements Runnable {
     private long[] lastTime = new long[60];
     private int timeIndex;
 
-    private World world;
-
     private BasicStroke thiccboi = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 10);
 
     private BufferedImage background;
 
-    public Renderer(World world) throws IOException {
+    public Renderer(GameState game) throws IOException {
+        this.game = game;
         frame = new JFrame("Open Day Race");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIgnoreRepaint(true);
@@ -55,8 +56,6 @@ public class Renderer implements Runnable {
         insets = frame.getInsets();
 
         background = ImageIO.read(Renderer.class.getResourceAsStream("/uk/ac/exeter/opendayrace/client/background.png"));
-
-        this.world = world;
     }
 
     @Override
@@ -83,16 +82,18 @@ public class Renderer implements Runnable {
     }
 
     private void drawBackground() {
-        //g.setColor(Color.BLACK);
         int bw = background.getWidth(), bh = background.getHeight();
         double scalefactor = Math.min(fw / bw, fh / bh);
         double transform = scalefactor - 1;
         double dx = transform * fw / 2, dy = transform * fh / 2, dw = scalefactor * fw, dh = scalefactor * fh;
         drawImage(background, dx, dy, dw, dh);
-        for (Node n : world.getNodes()) {
+        for (Node n : game.getWorld().getNodes()) {
             drawNode(n, dx, dy, dw / bw, dh / bh);
         }
-        //g.fillRect(0, 0, fw, fh);
+    }
+
+    private void drawPopup() {
+
     }
 
     private void drawFPS(long time) {

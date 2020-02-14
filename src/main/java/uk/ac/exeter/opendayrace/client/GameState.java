@@ -1,14 +1,26 @@
 package uk.ac.exeter.opendayrace.client;
 
+import uk.ac.exeter.opendayrace.common.world.Node;
+import uk.ac.exeter.opendayrace.common.world.World;
 import uk.ac.exeter.opendayrace.common.world.WorldPath;
 
 import java.util.function.Consumer;
 
 public class GameState {
 
+    private final World world;
     private volatile State state;
     private volatile Consumer<WorldPath> callback;
     private volatile int travelTime;
+
+    public GameState() {
+        Node[] nodes = new Node[4];
+        nodes[0] = new Node(152, 303, 645, 237);
+        nodes[1] = new Node(487, 673, 722, 585);
+        nodes[2] = new Node(645, 237, 1320, 273);
+        nodes[3] = new Node(722, 585, 1260, 590);
+        world = new World(nodes);
+    }
 
     public void setConnecting() {
         state = State.CONNECTING;
@@ -30,6 +42,10 @@ public class GameState {
 
     public void setWorldPath(WorldPath path) {
         callback.accept(path);
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     enum State {
