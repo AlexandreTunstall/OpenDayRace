@@ -45,8 +45,13 @@ public class ClientConnection implements AutoCloseable {
     }
 
     private void parseVersion() {
-        if (readBuffer.get() != VERSION || readBuffer.get() != VERSION_END) {
+        byte clientVersion = readBuffer.get();
+        byte clientVersionEnd = readBuffer.get();
+        if (clientVersion != VERSION || clientVersionEnd != VERSION_END) {
+            System.out.println("Client version is incompatible, expected {" + VERSION + ", " + VERSION_END
+                    + "} got {" + clientVersion + ", " + VERSION_END + "}");
             sendStatus(STATUS_INCOMPATIBLE_VERSION, this::closeSafe);
+            return;
         }
         sendStatus(STATUS_OK, this::addPlayer);
     }
@@ -73,6 +78,7 @@ public class ClientConnection implements AutoCloseable {
     }
 
     private void sendStatus(byte status, Runnable next) {
+        System.out.println("Sending status " + status);
         writeBuffer.put(status);
         writeBuffer.flip();
         socket.write(writeBuffer, next, ensureWrite);
@@ -108,11 +114,11 @@ public class ClientConnection implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        socket.close();
         game.removePlayer(this);
+        socket.close();
     }
 
-    private abstract static class AbstractHandler<A> implements CompletionHandler<Integer, A> {
+    private abstract class AbstractHandler<A> implements CompletionHandler<Integer, A> {
         protected final ByteBuffer buffer;
         private final String message;
 
@@ -125,6 +131,7 @@ public class ClientConnection implements AutoCloseable {
         public void failed(Throwable throwable, A a) {
             System.err.println(message);
             throwable.printStackTrace();
+            closeSafe();
         }
     }
 

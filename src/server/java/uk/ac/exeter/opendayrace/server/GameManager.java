@@ -22,9 +22,12 @@ public class GameManager implements Runnable, AutoCloseable {
 
     public void addPlayer(ClientConnection player) {
         joinQueue.add(player);
+        // If this is the first join, the game thread is waiting, so we try waking it up
+        notifyPathSelected();
     }
 
     public void removePlayer(ClientConnection player) {
+        System.out.println("Client disconnected");
         leaveQueue.add(player);
         // In case the game thread is waiting for this player to select a path
         notifyPathSelected();
@@ -40,31 +43,31 @@ public class GameManager implements Runnable, AutoCloseable {
     public void run() {
         List<ClientConnection> players = new ArrayList<>();
         while (!closed) {
+            System.out.println("Processing join queue");
             synchronized (joinQueue) {
                 players.addAll(joinQueue);
                 joinQueue.clear();
             }
-            synchronized (leaveQueue) {
-                players.removeAll(leaveQueue);
-                leaveQueue.clear();
-            }
-            for (ClientConnection player : players) {
-                player.onGameReady();
-            }
             boolean doneWaiting = false;
             synchronized (notifier) {
+                for (ClientConnection player : players) {
+                    player.onGameReady();
+                }
                 while (!doneWaiting) {
+                    try {
+                        notifier.wait();
+                    } catch (InterruptedException ignored) { }
                     doneWaiting = true;
+                    System.out.println("Processing leave queue");
+                    synchronized (leaveQueue) {
+                        players.removeAll(leaveQueue);
+                        leaveQueue.clear();
+                    }
                     for (ClientConnection player : players) {
                         if (player.selectedPath == null) {
+                            System.out.println("Not done waiting though");
                             doneWaiting = false;
                             break;
-                        }
-                    }
-                    if (!doneWaiting) {
-                        try {
-                            notifier.wait();
-                        } catch (InterruptedException ignored) {
                         }
                     }
                 }

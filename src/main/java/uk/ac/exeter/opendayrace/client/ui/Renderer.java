@@ -108,6 +108,9 @@ public class Renderer implements Runnable {
             case DISPLAYING_TIME:
                 popupText = "The path you chose took you " + game.getTravelTime() + " minutes";
                 break;
+            case LOST_CONNECTION:
+                popupText = "Lost connection, press enter to reconnect";
+                break;
         }
         g.setColor(new Color(0, 0, 0, 191));
         g.fill(new Rectangle2D.Double(0, 0, fw, fh));

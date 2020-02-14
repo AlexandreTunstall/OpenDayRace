@@ -12,6 +12,7 @@ public class GameState {
     private volatile State state;
     private volatile Consumer<WorldPath> callback;
     private volatile int travelTime;
+    private volatile Runnable reconnect;
 
     public GameState() {
         Node[] nodes = new Node[4];
@@ -45,6 +46,14 @@ public class GameState {
         callback.accept(path);
     }
 
+    public void setLostConnection() {
+        state = State.LOST_CONNECTION;
+    }
+
+    public void setReconnect(Runnable reconnect) {
+        this.reconnect = reconnect;
+    }
+
     public World getWorld() {
         return world;
     }
@@ -73,6 +82,10 @@ public class GameState {
         /**
          * Displaying the path to the player
          */
-        DISPLAYING_TIME
+        DISPLAYING_TIME,
+        /**
+         * Lost the connection and awaiting user input before trying to reconnect
+         */
+        LOST_CONNECTION
     }
 }

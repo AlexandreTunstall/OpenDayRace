@@ -21,6 +21,7 @@ public class Server implements AutoCloseable, CompletionHandler<AsynchronousSock
         this.socket = socket;
         game = new GameManager();
         System.out.println("Waiting for connections");
+        new Thread(game, "Game").start();
         queue(socket);
     }
 
