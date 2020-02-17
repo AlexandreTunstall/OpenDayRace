@@ -110,6 +110,15 @@ public class GameManager implements Runnable, AutoCloseable {
                     case RIGHT_RIGHT:
                         player.onTimeCalculated(right_right_time);
                         break;
+                    default:
+                        throw new IllegalStateException("player selected invalid path");
+                }
+            }
+            if (players.size() > 0) {
+                try {
+                    Thread.sleep(10000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

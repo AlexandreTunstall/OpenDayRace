@@ -14,24 +14,19 @@ public class GameState {
     private volatile Consumer<WorldPath> callback;
     private volatile int travelTime;
     private volatile Runnable reconnect;
-    private volatile List<Node> selectedPath = new ArrayList<Node>();
+    private volatile List<Node> selectedPath = new ArrayList<>();
 
     public GameState() {
         Node[] nodes = new Node[3];
-        //nodes[0] = new Node(152, 303);
-        //nodes[0] = new Node(487, 673);
         nodes[0] = new Node(1930, 640, true, false);
-        //nodes[0].addConnection(nodes[1]);
         nodes[1] = new Node(1560, 1400, true, false);
-        //nodes[0].addConnection(nodes[2]);
         nodes[0].addConnection(nodes[1]);
         nodes[1].addConnection(nodes[0]);
         nodes[2] = new Node(3300, 1300, false, true);
         nodes[0].addConnection(nodes[2]);
-        //nodes[5] = new Node(1260, 590);
         nodes[1].addConnection(nodes[2]);
         world = new World(nodes);
-        state = State.CONNECTING;
+        setConnecting();
     }
 
     public void setConnecting() {

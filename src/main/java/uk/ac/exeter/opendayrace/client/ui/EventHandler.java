@@ -64,9 +64,6 @@ public class EventHandler implements MouseListener, ComponentListener {
                         this.game.popFromPath();
                     }
                     break;
-                } else {
-                    System.out.println("Miss!");
-                    System.out.println("Distance: " + (Math.pow(mouseEvent.getX() - (node.getX1() * wScale + dx), 2) + Math.pow(mouseEvent.getY() - (node.getY1() * hScale + dy), 2)));
                 }
             }
         }
