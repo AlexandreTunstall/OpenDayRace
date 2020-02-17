@@ -2,10 +2,11 @@ package uk.ac.exeter.opendayrace.client.ui;
 
 import uk.ac.exeter.opendayrace.client.GameState;
 import uk.ac.exeter.opendayrace.common.world.Node;
-import uk.ac.exeter.opendayrace.common.world.WorldPath;
 
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class EventHandler implements MouseListener, ComponentListener {
 
@@ -37,7 +38,7 @@ public class EventHandler implements MouseListener, ComponentListener {
             double dx = transform * this.renderer.getFw() / 2, dy = transform * this.renderer.getFh() / 2, wScale = scalefactor, hScale = scalefactor;
             // find closest node and toggle selection
             for (Node node : game.getWorld().getNodes()) {
-                if (Math.pow(mouseEvent.getX() - (node.getX1() * wScale + dx), 2) + Math.pow(mouseEvent.getY() - (node.getY1() * hScale + dy), 2) < Math.pow(30, 2)) {
+                if (Math.pow(mouseEvent.getX() - (node.getX1() * wScale + dx), 2) + Math.pow(mouseEvent.getY() - (node.getY1() * hScale + dy), 2) < Math.pow(Renderer.NODE_RADIUS, 2)) {
                     // if adding nodes make sure that only a node connected to a previous node can be selected
                     if (!node.isSelected()) {
                         Node last = this.game.getLastNodeInPath();
@@ -63,6 +64,9 @@ public class EventHandler implements MouseListener, ComponentListener {
                         this.game.popFromPath();
                     }
                     break;
+                } else {
+                    System.out.println("Miss!");
+                    System.out.println("Distance: " + (Math.pow(mouseEvent.getX() - (node.getX1() * wScale + dx), 2) + Math.pow(mouseEvent.getY() - (node.getY1() * hScale + dy), 2)));
                 }
             }
         }

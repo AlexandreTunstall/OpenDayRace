@@ -18,6 +18,7 @@ import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 
 public class Renderer implements Runnable {
+    public static final double NODE_RADIUS = 30;
     private final GameState game;
 
     private JFrame frame;
@@ -160,8 +161,7 @@ public class Renderer implements Runnable {
     }
 
     private void drawNode(Node node, double dx, double dy, double dw, double dh) {
-        int radius = 30;
-        Shape circle = new Ellipse2D.Double(node.getX1() * dw - radius + dx, node.getY1() * dh - radius + dy, 2.0 * radius, 2.0 * radius);
+        Shape circle = new Ellipse2D.Double(node.getX1() * dw - NODE_RADIUS + dx, node.getY1() * dh - NODE_RADIUS + dy, 2.0 * NODE_RADIUS, 2.0 * NODE_RADIUS);
         g.setColor(Color.WHITE);
         if (node.isSelected()) g.setColor(Color.CYAN);
         g.fill(circle);
@@ -194,13 +194,12 @@ public class Renderer implements Runnable {
     public GameState getGame() { return this.game; }
 
     public double getScaleFactor() {
-        return Math.min((float) fw / this.getBackgroundWidth(), (float) fh / this.getBackgroundHeight());
+        return Math.min((double)fw / this.background.getWidth(), (double)fh / background.getHeight());
     }
 
-    public int getFw() { return fw; }
+    public double getFw() { return fw; }
 
-    public int getFh() { return fh; }
-
+    public double getFh() { return fh; }
     public double getBackgroundWidth() { return this.background.getWidth(); }
 
     public double getBackgroundHeight() { return this.background.getHeight(); }
