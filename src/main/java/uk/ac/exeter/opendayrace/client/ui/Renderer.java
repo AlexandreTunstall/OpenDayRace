@@ -88,8 +88,8 @@ public class Renderer implements Runnable {
     }
 
     private void drawBackground() {
-        float bw = background.getWidth(), bh = background.getHeight();
-        double scalefactor = Math.min(fw / bw, fh / bh);
+        double bw = background.getWidth(), bh = background.getHeight();
+        double scalefactor = Math.min((float) fw / bw, (float) fh / bh);
         double transform = Math.max(0, scalefactor - 1);
         double dx = transform * bw / 2, dy = transform * bh / 2, dw = scalefactor * bw, dh = scalefactor * bh;
         //System.out.println("Scale Factor: " + scalefactor);
@@ -188,16 +188,16 @@ public class Renderer implements Runnable {
     public GameState getGame() { return this.game; }
 
     public double getScaleFactor() {
-        return Math.min(fw / this.background.getWidth(), fh / background.getHeight());
+        return Math.min((float) fw / this.getBackgroundWidth(), (float) fh / this.getBackgroundHeight());
     }
 
     public int getFw() { return fw; }
 
     public int getFh() { return fh; }
 
-    public int getBackgroundWidth() { return this.background.getWidth(); }
+    public double getBackgroundWidth() { return this.background.getWidth(); }
 
-    public int getBackgroundHeight() { return this.background.getHeight(); }
+    public double getBackgroundHeight() { return this.background.getHeight(); }
 
     protected static final int TOP_LEFT = 0;
     protected static final int TOP_RIGHT = 1;

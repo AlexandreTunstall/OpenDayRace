@@ -33,7 +33,7 @@ public class EventHandler implements MouseListener, ComponentListener {
     public void mouseReleased(MouseEvent mouseEvent) {
         if (this.game.getState() == GameState.State.AWAITING_SELECTION) {
             double scalefactor = this.renderer.getScaleFactor();
-            double transform = scalefactor - 1;
+            double transform = Math.max(0, scalefactor - 1);
             double dx = transform * this.renderer.getFw() / 2, dy = transform * this.renderer.getFh() / 2, wScale = scalefactor, hScale = scalefactor;
             // find closest node and toggle selection
             for (Node node : game.getWorld().getNodes()) {
