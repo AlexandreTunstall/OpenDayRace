@@ -42,8 +42,7 @@ public class Renderer implements Runnable {
         frame.setIgnoreRepaint(true);
         frame.setUndecorated(true);
         frame.setFocusTraversalKeysEnabled(false);
-        frame.setSize(640, 480);
-        frame.setLocationRelativeTo(null);
+        frame.setLocation(0, 0);
         frame.setVisible(true);
         frame.createBufferStrategy(2);
 
@@ -52,8 +51,17 @@ public class Renderer implements Runnable {
         System.out.println("\tFlip contents: " + bc.getFlipContents());
         System.out.println("\tFull screen required: " + bc.isFullScreenRequired());
         System.out.println("\tPage flipping: " + bc.isPageFlipping());
+        GraphicsDevice screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        DisplayMode dm = screen.getDisplayMode();
+        System.out.println("\tFrame size: " + dm);
+        frame.setSize(dm.getWidth(), dm.getHeight());
 
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+        if (screen.isFullScreenSupported()) {
+            screen.setFullScreenWindow(frame);
+            if (screen.isDisplayChangeSupported()) {
+                screen.setDisplayMode(dm);
+            }
+        }
 
         insets = frame.getInsets();
 
@@ -88,12 +96,10 @@ public class Renderer implements Runnable {
     }
 
     private void drawBackground() {
-        float bw = background.getWidth(), bh = background.getHeight();
+        double bw = background.getWidth(), bh = background.getHeight();
         double scalefactor = Math.min(fw / bw, fh / bh);
         double transform = Math.max(0, scalefactor - 1);
         double dx = transform * bw / 2, dy = transform * bh / 2, dw = scalefactor * bw, dh = scalefactor * bh;
-        //System.out.println("Scale Factor: " + scalefactor);
-        //System.out.println("dx: " + dx);
         drawImage(background, dx, dy, dw, dh);
         for (Node n : game.getWorld().getNodes()) {
             drawNode(n, dx, dy, scalefactor, scalefactor);
