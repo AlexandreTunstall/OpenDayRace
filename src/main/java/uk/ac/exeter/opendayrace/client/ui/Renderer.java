@@ -33,6 +33,8 @@ public class Renderer implements Runnable {
 
     private BufferedImage background;
 
+    private EventHandler eHandler;
+
     public Renderer(GameState game) throws IOException {
         this.game = game;
         frame = new JFrame("Open Day Race");
@@ -56,6 +58,9 @@ public class Renderer implements Runnable {
         insets = frame.getInsets();
 
         background = ImageIO.read(Renderer.class.getResourceAsStream("/uk/ac/exeter/opendayrace/client/background.png"));
+
+        eHandler = new EventHandler(this);
+
     }
 
     @Override
@@ -149,14 +154,12 @@ public class Renderer implements Runnable {
     private void drawNode(Node node, double dx, double dy, double dw, double dh) {
         int radius = 30;
         Shape circle = new Ellipse2D.Double(node.getX1() * dw - radius + dx, node.getY1() * dh - radius + dy, 2.0 * radius, 2.0 * radius);
-        Shape circle2 = new Ellipse2D.Double(node.getX2() * dw - radius + dx, node.getY2() * dh - radius + dy, 2.0 * radius, 2.0 * radius);
         g.setColor(Color.WHITE);
+        if (node.isSelected()) g.setColor(Color.CYAN);
         g.fill(circle);
-        g.fill(circle2);
         g.setColor(Color.GRAY);
         g.setStroke(thiccboi);
         g.draw(circle);
-        g.draw(circle2);
     }
 
     private void drawAlignedString(String string, double x, double y, double h, int alignment) {
@@ -177,6 +180,22 @@ public class Renderer implements Runnable {
         layout.draw(g, 0F, 0F);
         g.setTransform(original);
     }
+
+    public JFrame getFrame() { return this.frame; }
+
+    public GameState getGame() { return this.game; }
+
+    public double getScaleFactor() {
+        return Math.min(fw / this.background.getWidth(), fh / background.getHeight());
+    }
+
+    public int getFw() { return fw; }
+
+    public int getFh() { return fh; }
+
+    public int getBackgroundWidth() { return this.background.getWidth(); }
+
+    public int getBackgroundHeight() { return this.background.getHeight(); }
 
     protected static final int TOP_LEFT = 0;
     protected static final int TOP_RIGHT = 1;

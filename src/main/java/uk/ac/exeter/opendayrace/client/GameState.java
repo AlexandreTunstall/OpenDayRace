@@ -4,6 +4,7 @@ import uk.ac.exeter.opendayrace.common.world.Node;
 import uk.ac.exeter.opendayrace.common.world.World;
 import uk.ac.exeter.opendayrace.common.world.WorldPath;
 
+import java.util.*;
 import java.util.function.Consumer;
 
 public class GameState {
@@ -13,13 +14,22 @@ public class GameState {
     private volatile Consumer<WorldPath> callback;
     private volatile int travelTime;
     private volatile Runnable reconnect;
+    private volatile List<Node> selectedPath = new ArrayList<Node>();
 
     public GameState() {
-        Node[] nodes = new Node[4];
-        nodes[0] = new Node(152, 303, 645, 237);
-        nodes[1] = new Node(487, 673, 722, 585);
-        nodes[2] = new Node(645, 237, 1320, 273);
-        nodes[3] = new Node(722, 585, 1260, 590);
+        Node[] nodes = new Node[3];
+        //nodes[0] = new Node(152, 303);
+        //nodes[0] = new Node(487, 673);
+        nodes[0] = new Node(645, 237, true, false);
+        //nodes[0].addConnection(nodes[1]);
+        nodes[1] = new Node(722, 585, true, false);
+        //nodes[0].addConnection(nodes[2]);
+        nodes[0].addConnection(nodes[1]);
+        nodes[1].addConnection(nodes[0]);
+        nodes[2] = new Node(1320, 273, false, true);
+        nodes[0].addConnection(nodes[2]);
+        //nodes[5] = new Node(1260, 590);
+        nodes[1].addConnection(nodes[2]);
         world = new World(nodes);
         state = State.CONNECTING;
     }
@@ -64,6 +74,33 @@ public class GameState {
 
     public int getTravelTime() {
         return travelTime;
+    }
+
+    public void addToPath(Node node) {
+        this.selectedPath.add(node);
+    }
+
+    public Node getLastNodeInPath() {
+        if (this.selectedPath.isEmpty()) return null;
+        return this.selectedPath.get(this.selectedPath.size() - 1);
+    }
+
+    public WorldPath calculatePath() {
+        if (this.selectedPath.get(0) == this.world.getNodes()[0]) {
+            // LEFT
+            if (this.selectedPath.size() > 2) return WorldPath.LEFT_RIGHT;
+            return WorldPath.LEFT_LEFT;
+        } else {
+            //RIGHT
+            if (this.selectedPath.size() > 2) return WorldPath.RIGHT_LEFT;
+            return WorldPath.RIGHT_RIGHT;
+        }
+    }
+
+    public void popFromPath() {
+        if (this.selectedPath.size() > 0) {
+            this.selectedPath.remove(this.selectedPath.size() - 1);
+        }
     }
 
     public enum State {

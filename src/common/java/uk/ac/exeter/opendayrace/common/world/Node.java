@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-    private double x1, y1, x2, y2;
+    private double x1, y1;
     private List<Node> connectedNodes;
+    private boolean selected = false;
+    public final boolean startingNode;
+    public final boolean endingNode;
 
-    public Node(double x1, double y1, double x2, double y2) {
+    public Node(double x1, double y1, boolean isStartingNode, boolean isEndingNode) {
         this.x1 = x1;
         this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-        connectedNodes = new ArrayList<>();
+        this.connectedNodes = new ArrayList<>();
+        this.startingNode = isStartingNode;
+        this.endingNode = isEndingNode;
+    }
+
+    public Node(double x1, double y1) {
+        this(x1, y1, false, false);
     }
 
     public double getX1() {
@@ -23,13 +30,9 @@ public class Node {
         return y1;
     }
 
-    public double getX2() {
-        return x2;
-    }
+    public void setSelected(boolean val) { this.selected = val; }
 
-    public double getY2() {
-        return y2;
-    }
+    public boolean isSelected() { return this.selected; }
 
     public void addConnection(Node node) {
         connectedNodes.add(node);

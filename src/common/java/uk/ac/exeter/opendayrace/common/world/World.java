@@ -45,8 +45,7 @@ public class World {
             try {
                 this.data = data;
                 curr = 0;
-                node = new Node(nextDouble("x1"), nextDouble("y1"),
-                        nextDouble("x2"), nextDouble("y2"));
+                node = new Node(nextDouble("x1"), nextDouble("y1"));
                 String[] rawConns = data.substring(curr).split(",");
                 connections = new int[rawConns.length];
                     for (int index = 0; index < rawConns.length; index++) {
