@@ -88,13 +88,15 @@ public class Renderer implements Runnable {
     }
 
     private void drawBackground() {
-        int bw = background.getWidth(), bh = background.getHeight();
+        float bw = background.getWidth(), bh = background.getHeight();
         double scalefactor = Math.min(fw / bw, fh / bh);
-        double transform = scalefactor - 1;
-        double dx = transform * fw / 2, dy = transform * fh / 2, dw = scalefactor * fw, dh = scalefactor * fh;
+        double transform = Math.max(0, scalefactor - 1);
+        double dx = transform * bw / 2, dy = transform * bh / 2, dw = scalefactor * bw, dh = scalefactor * bh;
+        //System.out.println("Scale Factor: " + scalefactor);
+        //System.out.println("dx: " + dx);
         drawImage(background, dx, dy, dw, dh);
         for (Node n : game.getWorld().getNodes()) {
-            drawNode(n, dx, dy, dw / bw, dh / bh);
+            drawNode(n, dx, dy, scalefactor, scalefactor);
         }
     }
 
