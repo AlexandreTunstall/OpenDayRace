@@ -20,13 +20,13 @@ public class GameState {
         Node[] nodes = new Node[3];
         //nodes[0] = new Node(152, 303);
         //nodes[0] = new Node(487, 673);
-        nodes[0] = new Node(645, 237, true, false);
+        nodes[0] = new Node(1930, 640, true, false);
         //nodes[0].addConnection(nodes[1]);
-        nodes[1] = new Node(722, 585, true, false);
+        nodes[1] = new Node(1560, 1400, true, false);
         //nodes[0].addConnection(nodes[2]);
         nodes[0].addConnection(nodes[1]);
         nodes[1].addConnection(nodes[0]);
-        nodes[2] = new Node(1320, 273, false, true);
+        nodes[2] = new Node(3300, 1300, false, true);
         nodes[0].addConnection(nodes[2]);
         //nodes[5] = new Node(1260, 590);
         nodes[1].addConnection(nodes[2]);
