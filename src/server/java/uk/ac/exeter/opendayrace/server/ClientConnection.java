@@ -109,15 +109,12 @@ public class ClientConnection implements AutoCloseable {
         sendStatus(STATUS_AWAITING_SELECTION, this::readSelection);
     }
 
-    public void onTimeCalculated(int time) {
-        sendStatus(STATUS_SHOW_PATHS, () -> sendInt(time, () -> {}));
-    }
-
-    public void sendPlayerPathCount(int left1_count, int right1_count, int left2_count, int right2_count) {
-        sendStatus(PLAYER_PATH_COUNT_LEFT_1, () -> sendInt(left1_count, () ->
-        sendStatus(PLAYER_PATH_COUNT_RIGHT_1, () -> sendInt(right1_count, () ->
-        sendStatus(PLAYER_PATH_COUNT_LEFT_2, () -> sendInt(left2_count, () ->
-        sendStatus(PLAYER_PATH_COUNT_RIGHT_2, () -> sendInt(right2_count, () -> {}))))))));
+    public void onTimeCalculated(int time, int left1_count, int right1_count, int left2_count, int right2_count) {
+        sendStatus(STATUS_SHOW_PATHS, () -> sendInt(time, () ->
+                sendStatus(PLAYER_PATH_COUNT_LEFT_1, () -> sendInt(left1_count, () ->
+                        sendStatus(PLAYER_PATH_COUNT_RIGHT_1, () -> sendInt(right1_count, () ->
+                                sendStatus(PLAYER_PATH_COUNT_LEFT_2, () -> sendInt(left2_count, () ->
+                                        sendStatus(PLAYER_PATH_COUNT_RIGHT_2, () -> sendInt(right2_count, () -> {}))))))))));
     }
 
     @Override

@@ -98,23 +98,24 @@ public class GameManager implements Runnable, AutoCloseable {
             // Let the players know of their mistakes
             for (ClientConnection player : players) {
                 // Send people down each path
-                    switch (player.selectedPath) {
-                        case LEFT_LEFT:
-                            player.onTimeCalculated(left_left_time);
-                            break;
-                        case LEFT_RIGHT:
-                            player.onTimeCalculated(left_right_time);
-                            break;
-                        case RIGHT_LEFT:
-                            player.onTimeCalculated(right_left_time);
-                            break;
-                        case RIGHT_RIGHT:
-                            player.onTimeCalculated(right_right_time);
-                            break;
-                        default:
-                            throw new IllegalStateException("player selected invalid path");
-                    }
-                    player.sendPlayerPathCount(left_1_players, right_1_players, left_2_players, right_2_players);
+                int time;
+                switch (player.selectedPath) {
+                    case LEFT_LEFT:
+                        time = left_left_time;
+                        break;
+                    case LEFT_RIGHT:
+                        time = left_right_time;
+                        break;
+                    case RIGHT_LEFT:
+                        time = right_left_time;
+                        break;
+                    case RIGHT_RIGHT:
+                        time = right_right_time;
+                        break;
+                    default:
+                        throw new IllegalStateException("player selected invalid path");
+                }
+                player.onTimeCalculated(time, left_1_players, right_1_players, left_2_players, right_2_players);
             }
             if (players.size() > 0) {
                 try {
