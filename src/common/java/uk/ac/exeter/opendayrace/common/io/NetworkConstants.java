@@ -18,6 +18,11 @@ public class NetworkConstants {
     public static final byte PATH_RIGHT_LEFT = 7;
     public static final byte PATH_RIGHT_RIGHT = 8;
 
+    public static final byte PLAYER_PATH_COUNT_LEFT_1 = 9;
+    public static final byte PLAYER_PATH_COUNT_RIGHT_1 = 10;
+    public static final byte PLAYER_PATH_COUNT_LEFT_2 = 11;
+    public static final byte PLAYER_PATH_COUNT_RIGHT_2 = 12;
+
     // Prevent instantiation
     private NetworkConstants() {}
 }

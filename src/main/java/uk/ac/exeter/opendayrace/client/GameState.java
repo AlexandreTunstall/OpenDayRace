@@ -15,6 +15,7 @@ public class GameState {
     private volatile int travelTime;
     private volatile Runnable reconnect;
     private volatile List<Node> selectedPath = new ArrayList<>();
+    private volatile int[] playerPathCounts = {0, 0, 0, 0};
 
     public GameState() {
         Node[] nodes = new Node[3];
@@ -44,6 +45,10 @@ public class GameState {
 
     public void setShowPaths(int travelTime) {
         this.travelTime = travelTime;
+        for (Node node : this.world.getNodes()) {
+            node.setSelected(false);
+        }
+        this.selectedPath = new ArrayList<Node>();
         state = State.DISPLAYING_TIME;
     }
 
@@ -96,6 +101,14 @@ public class GameState {
         if (this.selectedPath.size() > 0) {
             this.selectedPath.remove(this.selectedPath.size() - 1);
         }
+    }
+
+    public void setPlayerPathCounts(int index, int value) {
+        this.playerPathCounts[index] = value;
+    }
+
+    public int[] getPlayerPathCounts() {
+        return this.playerPathCounts;
     }
 
     public enum State {

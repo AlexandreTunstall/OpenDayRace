@@ -88,31 +88,33 @@ public class GameManager implements Runnable, AutoCloseable {
                     right_2_players++;
                 }
             }
-            int FIXED_TIME_PATH_TIME = 45;
-            int WEIGHTED_PATH_WEIGHT = 2;
+            double FIXED_TIME_PATH_TIME = 45;
+            double WEIGHTED_PATH_WEIGHT = 2;
             // Calculate path times
-            int left_left_time = left_1_players / WEIGHTED_PATH_WEIGHT + FIXED_TIME_PATH_TIME;
-            int left_right_time = left_1_players / WEIGHTED_PATH_WEIGHT + right_2_players / WEIGHTED_PATH_WEIGHT;
-            int right_right_time = FIXED_TIME_PATH_TIME + right_2_players / WEIGHTED_PATH_WEIGHT;
-            int right_left_time = FIXED_TIME_PATH_TIME + FIXED_TIME_PATH_TIME;
+            int left_left_time = (int) Math.ceil(left_1_players / WEIGHTED_PATH_WEIGHT + FIXED_TIME_PATH_TIME);
+            int left_right_time = (int) Math.ceil(left_1_players / WEIGHTED_PATH_WEIGHT + right_2_players / WEIGHTED_PATH_WEIGHT);
+            int right_right_time = (int) Math.ceil(FIXED_TIME_PATH_TIME + right_2_players / WEIGHTED_PATH_WEIGHT);
+            int right_left_time = (int) Math.ceil(FIXED_TIME_PATH_TIME + FIXED_TIME_PATH_TIME);
             // Let the players know of their mistakes
             for (ClientConnection player : players) {
-                switch (player.selectedPath) {
-                    case LEFT_LEFT:
-                        player.onTimeCalculated(left_left_time);
-                        break;
-                    case LEFT_RIGHT:
-                        player.onTimeCalculated(left_right_time);
-                        break;
-                    case RIGHT_LEFT:
-                        player.onTimeCalculated(right_left_time);
-                        break;
-                    case RIGHT_RIGHT:
-                        player.onTimeCalculated(right_right_time);
-                        break;
-                    default:
-                        throw new IllegalStateException("player selected invalid path");
-                }
+                // Send people down each path
+                    switch (player.selectedPath) {
+                        case LEFT_LEFT:
+                            player.onTimeCalculated(left_left_time);
+                            break;
+                        case LEFT_RIGHT:
+                            player.onTimeCalculated(left_right_time);
+                            break;
+                        case RIGHT_LEFT:
+                            player.onTimeCalculated(right_left_time);
+                            break;
+                        case RIGHT_RIGHT:
+                            player.onTimeCalculated(right_right_time);
+                            break;
+                        default:
+                            throw new IllegalStateException("player selected invalid path");
+                    }
+                    player.sendPlayerPathCount(left_1_players, right_1_players, left_2_players, right_2_players);
             }
             if (players.size() > 0) {
                 try {

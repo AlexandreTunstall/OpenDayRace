@@ -55,7 +55,28 @@ public class ServerConnection implements Runnable {
                 readBuffer();
                 game.setShowPaths(readBuffer.getInt());
                 break;
+            case PLAYER_PATH_COUNT_LEFT_1:
+                readSetPathCount(0);
+                break;
+            case PLAYER_PATH_COUNT_RIGHT_1:
+                readSetPathCount(1);
+                break;
+            case PLAYER_PATH_COUNT_LEFT_2:
+                readSetPathCount(2);
+                break;
+            case PLAYER_PATH_COUNT_RIGHT_2:
+                readSetPathCount(3);
+                break;
         }
+    }
+
+    private void readSetPathCount(int i) throws IOException {
+        readBuffer.clear();
+        readBuffer.limit(4);
+        readBuffer();
+        int count = readBuffer.getInt();
+        System.out.println("Player Count Got: " + count);
+        game.setPlayerPathCounts(i, count);
     }
 
     private void sendSelection(WorldPath selection) {

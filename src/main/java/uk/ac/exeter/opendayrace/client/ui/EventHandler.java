@@ -33,12 +33,10 @@ public class EventHandler implements MouseListener, ComponentListener {
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         if (this.game.getState() == GameState.State.AWAITING_SELECTION) {
-            double scalefactor = this.renderer.getScaleFactor();
-            double transform = Math.max(0, scalefactor - 1);
-            double dx = transform * this.renderer.getFw() / 2, dy = transform * this.renderer.getFh() / 2, wScale = scalefactor, hScale = scalefactor;
             // find closest node and toggle selection
             for (Node node : game.getWorld().getNodes()) {
-                if (Math.pow(mouseEvent.getX() - (node.getX1() * wScale + dx), 2) + Math.pow(mouseEvent.getY() - (node.getY1() * hScale + dy), 2) < Math.pow(Renderer.NODE_RADIUS, 2)) {
+                double nodeXY[] = this.renderer.mapCoordinates(node.getX1(), node.getY1());
+                if (Math.pow(mouseEvent.getX() - nodeXY[0], 2) + Math.pow(mouseEvent.getY() - nodeXY[1], 2) < Math.pow(Renderer.NODE_RADIUS, 2)) {
                     // if adding nodes make sure that only a node connected to a previous node can be selected
                     if (!node.isSelected()) {
                         Node last = this.game.getLastNodeInPath();

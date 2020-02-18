@@ -86,6 +86,7 @@ public class Renderer implements Runnable {
             g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
             this.g = g;
             drawBackground();
+            drawPlayerCounts();
             drawPopup();
             drawFPS(time);
         } finally {
@@ -103,7 +104,7 @@ public class Renderer implements Runnable {
         double dx = transform * bw / 2, dy = transform * bh / 2, dw = scalefactor * bw, dh = scalefactor * bh;
         drawImage(background, dx, dy, dw, dh);
         for (Node n : game.getWorld().getNodes()) {
-            drawNode(n, dx, dy, scalefactor, scalefactor);
+            drawNode(n);
         }
     }
 
@@ -160,14 +161,34 @@ public class Renderer implements Runnable {
         g.setTransform(original);
     }
 
-    private void drawNode(Node node, double dx, double dy, double dw, double dh) {
-        Shape circle = new Ellipse2D.Double(node.getX1() * dw - NODE_RADIUS + dx, node.getY1() * dh - NODE_RADIUS + dy, 2.0 * NODE_RADIUS, 2.0 * NODE_RADIUS);
+    private void drawNode(Node node) {
+        double xy[] = this.mapCoordinates(node.getX1(), node.getY1());
+        Shape circle = new Ellipse2D.Double(xy[0] - NODE_RADIUS, xy[1] - NODE_RADIUS, 2.0 * NODE_RADIUS, 2.0 * NODE_RADIUS);
+        //Shape circle = new Ellipse2D.Double(node.getX1() * dw - NODE_RADIUS + dx, node.getY1() * dh - NODE_RADIUS + dy, 2.0 * NODE_RADIUS, 2.0 * NODE_RADIUS);
         g.setColor(Color.WHITE);
         if (node.isSelected()) g.setColor(Color.CYAN);
         g.fill(circle);
         g.setColor(Color.GRAY);
         g.setStroke(thiccboi);
         g.draw(circle);
+    }
+
+    private void drawPlayerCounts() {
+        double[][] textPositions = {
+                {1460, 440},
+                {1000, 1300},
+                {2640, 950},
+                {2970, 1640}
+        };
+
+        int[] pathCounts = this.game.getPlayerPathCounts();
+
+        g.setColor(Color.RED);
+
+        for (int i = 0; i < 4; i++) {
+            double[] xy = mapCoordinates(textPositions[i][0], textPositions[i][1]);
+            drawBoundedString("Players Last Round: " + pathCounts[i], xy[0], xy[1], 200, 50);
+        }
     }
 
     private void drawAlignedString(String string, double x, double y, double h, int alignment) {
@@ -200,6 +221,17 @@ public class Renderer implements Runnable {
     public double getFw() { return fw; }
 
     public double getFh() { return fh; }
+
+    public double[] mapCoordinates(double x, double y) {
+        double mapped[] = {0d, 0d};
+        double sf = this.getScaleFactor();
+        double transform = Math.max(0, sf - 1);
+        double dx = transform * this.getBackgroundWidth() / 2, dy = transform * this.getBackgroundHeight() / 2;
+        mapped[0] = x * sf + dx;
+        mapped[1] = y * sf + dy;
+        return mapped;
+    }
+
     public double getBackgroundWidth() { return this.background.getWidth(); }
 
     public double getBackgroundHeight() { return this.background.getHeight(); }

@@ -85,6 +85,7 @@ public class ClientConnection implements AutoCloseable {
     }
 
     private void sendInt(int time, Runnable next) {
+        System.out.println("Sending int: " + time);
         writeBuffer.putInt(time);
         writeBuffer.flip();
         socket.write(writeBuffer, next, ensureWrite);
@@ -110,6 +111,13 @@ public class ClientConnection implements AutoCloseable {
 
     public void onTimeCalculated(int time) {
         sendStatus(STATUS_SHOW_PATHS, () -> sendInt(time, () -> {}));
+    }
+
+    public void sendPlayerPathCount(int left1_count, int right1_count, int left2_count, int right2_count) {
+        sendStatus(PLAYER_PATH_COUNT_LEFT_1, () -> sendInt(left1_count, () ->
+        sendStatus(PLAYER_PATH_COUNT_RIGHT_1, () -> sendInt(right1_count, () ->
+        sendStatus(PLAYER_PATH_COUNT_LEFT_2, () -> sendInt(left2_count, () ->
+        sendStatus(PLAYER_PATH_COUNT_RIGHT_2, () -> sendInt(right2_count, () -> {}))))))));
     }
 
     @Override
