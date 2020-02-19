@@ -88,7 +88,7 @@ public class GameManager implements Runnable, AutoCloseable {
                     right_2_players++;
                 }
             }
-            double FIXED_TIME_PATH_TIME = 45;
+            double FIXED_TIME_PATH_TIME = 10;
             double WEIGHTED_PATH_WEIGHT = 2;
             // Calculate path times
             int left_left_time = (int) Math.ceil(left_1_players / WEIGHTED_PATH_WEIGHT + FIXED_TIME_PATH_TIME);
