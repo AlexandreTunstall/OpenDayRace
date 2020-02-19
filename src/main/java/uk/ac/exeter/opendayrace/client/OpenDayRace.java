@@ -11,7 +11,41 @@ import java.net.*;
 
 public class OpenDayRace {
 
+    private static final int DEFAULT_PORT = 53892;
+
     public static void main(String[] args) {
+        InetAddress address = null;
+        int port = DEFAULT_PORT;
+        if (args.length > 0) {
+            if (args.length > 2) {
+                System.err.println(args.length + " arguments were specified, but only 2 are supported (the rest will be ignored)");
+            }
+            try {
+                address = InetAddress.getByName(args[0]);
+            } catch (UnknownHostException e) {
+                System.err.println("Failed to parse the given address");
+                System.err.println("Usage: [address] [port]");
+                return;
+            }
+            if (args.length > 1) {
+                try {
+                    port = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    System.err.println("Failed to parse the given port number");
+                    System.err.println("Usage: [address] [port]");
+                    return;
+                }
+            }
+        }
+        if (address == null) {
+            try {
+                address = InetAddress.getLocalHost();
+            } catch (UnknownHostException e) {
+                System.err.println("Failed to get the any address, please try again or specify the address manually");
+                e.printStackTrace();
+                return;
+            }
+        }
         // Enable hardware acceleration
         System.setProperty("sun.java2d.opengl", "true");
         GameState game = new GameState();
@@ -22,15 +56,8 @@ public class OpenDayRace {
             e.printStackTrace();
             return;
         }
-        InetAddress address;
-        try {
-            address = Inet4Address.getByName("144.173.65.27");
-        } catch (UnknownHostException e) {
-            System.err.println("Fatal exception: could not resolve server address");
-            e.printStackTrace();
-            return;
-        }
-        new Thread(() -> runNetwork(game, new InetSocketAddress(address, 53892)), "Network").start();
+        InetSocketAddress socketAddress = new InetSocketAddress(address, port);
+        new Thread(() -> runNetwork(game, socketAddress), "Network").start();
         while (true) {
             r.run();
         }

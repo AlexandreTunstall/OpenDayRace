@@ -47,31 +47,26 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-application {
-    // Define the main class for the application.
-    mainClassName = 'uk.ac.exeter.opendayrace.client.OpenDayRace'
-}
-
 task commonJar(type: Jar) {
     from {
         sourceSets.common.output
     }
-    archiveAppendix.set 'common'
+    appendix = 'common'
 }
 
 task serverJar(type: Jar) {
     from {
         sourceSets.server.output
     }
-    archiveAppendix.set 'server'
+    appendix = 'server'
     with commonJar
     manifest { it.attributes['Main-Class'] = 'uk.ac.exeter.opendayrace.server.Server' }
 }
 
 jar {
-    archiveAppendix.set 'client'
+    appendix = 'client'
     with commonJar
-    manifest { it.attributes['Main-Class'] = application.mainClassName }
+    manifest { it.attributes['Main-Class'] = 'uk.ac.exeter.opendayrace.client.OpenDayRace' }
 }
 
 sourceCompatibility = 1.8
