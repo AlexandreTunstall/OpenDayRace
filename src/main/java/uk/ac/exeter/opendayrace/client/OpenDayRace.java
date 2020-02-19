@@ -7,8 +7,7 @@ import uk.ac.exeter.opendayrace.client.io.ServerConnection;
 import uk.ac.exeter.opendayrace.client.ui.Renderer;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
+import java.net.*;
 
 public class OpenDayRace {
 
@@ -23,7 +22,15 @@ public class OpenDayRace {
             e.printStackTrace();
             return;
         }
-        new Thread(() -> runNetwork(game, new InetSocketAddress(53892)), "Network").start();
+        InetAddress address;
+        try {
+            address = Inet4Address.getByName("144.173.65.27");
+        } catch (UnknownHostException e) {
+            System.err.println("Fatal exception: could not resolve server address");
+            e.printStackTrace();
+            return;
+        }
+        new Thread(() -> runNetwork(game, new InetSocketAddress(address, 53892)), "Network").start();
         while (true) {
             r.run();
         }
