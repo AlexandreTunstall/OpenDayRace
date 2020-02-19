@@ -1,5 +1,7 @@
 package uk.ac.exeter.opendayrace.server;
 
+import uk.ac.exeter.opendayrace.common.io.NetworkConstants;
+
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -12,7 +14,6 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server implements AutoCloseable, CompletionHandler<AsynchronousSocketChannel, AsynchronousServerSocketChannel> {
-    private static final int DEFAULT_PORT = 53892;  // Mashed keyboard
     private static final int SERVER_THREADS = 50;
 
     private final AsynchronousServerSocketChannel socket;
@@ -28,7 +29,7 @@ public class Server implements AutoCloseable, CompletionHandler<AsynchronousSock
 
     public static void main(String[] args) {
         InetAddress address = null;
-        int port = DEFAULT_PORT;
+        int port = NetworkConstants.DEFAULT_PORT;
         if (args.length > 0) {
             if (args.length > 2) {
                 System.err.println(args.length + " arguments were specified, but only 2 are supported (the rest will be ignored)");

@@ -1,6 +1,8 @@
 package uk.ac.exeter.opendayrace.common.io;
 
 public class NetworkConstants {
+    public static final int DEFAULT_PORT = 9143;
+
     public static final byte VERSION = 1;
     public static final byte VERSION_END = 0;
 

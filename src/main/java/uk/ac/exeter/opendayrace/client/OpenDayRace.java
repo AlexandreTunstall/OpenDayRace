@@ -5,17 +5,16 @@ package uk.ac.exeter.opendayrace.client;
 
 import uk.ac.exeter.opendayrace.client.io.ServerConnection;
 import uk.ac.exeter.opendayrace.client.ui.Renderer;
+import uk.ac.exeter.opendayrace.common.io.NetworkConstants;
 
 import java.io.IOException;
 import java.net.*;
 
 public class OpenDayRace {
 
-    private static final int DEFAULT_PORT = 53892;
-
     public static void main(String[] args) {
         InetAddress address = null;
-        int port = DEFAULT_PORT;
+        int port = NetworkConstants.DEFAULT_PORT;
         if (args.length > 0) {
             if (args.length > 2) {
                 System.err.println(args.length + " arguments were specified, but only 2 are supported (the rest will be ignored)");
