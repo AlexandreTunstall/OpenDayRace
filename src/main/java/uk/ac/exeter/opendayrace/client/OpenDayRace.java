@@ -21,7 +21,7 @@ public class OpenDayRace {
                 System.err.println(args.length + " arguments were specified, but only 2 are supported (the rest will be ignored)");
             }
             try {
-                address = InetAddress.getByName(args[0]);
+                address = Inet4Address.getByName(args[0]);
             } catch (UnknownHostException e) {
                 System.err.println("Failed to parse the given address");
                 System.err.println("Usage: [address] [port]");
@@ -39,7 +39,7 @@ public class OpenDayRace {
         }
         if (address == null) {
             try {
-                address = InetAddress.getLocalHost();
+                address = Inet4Address.getLocalHost();
             } catch (UnknownHostException e) {
                 System.err.println("Failed to get the any address, please try again or specify the address manually");
                 e.printStackTrace();

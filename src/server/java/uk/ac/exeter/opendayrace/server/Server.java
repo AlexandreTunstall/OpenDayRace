@@ -1,6 +1,7 @@
 package uk.ac.exeter.opendayrace.server;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -33,7 +34,7 @@ public class Server implements AutoCloseable, CompletionHandler<AsynchronousSock
                 System.err.println(args.length + " arguments were specified, but only 2 are supported (the rest will be ignored)");
             }
             try {
-                address = InetAddress.getByName(args[0]);
+                address = Inet4Address.getByName(args[0]);
             } catch (UnknownHostException e) {
                 System.err.println("Failed to parse the given address");
                 System.err.println("Usage: [address] [port]");
@@ -51,7 +52,7 @@ public class Server implements AutoCloseable, CompletionHandler<AsynchronousSock
         }
         if (address == null) {
             try {
-                address = InetAddress.getLocalHost();
+                address = Inet4Address.getLocalHost();
             } catch (UnknownHostException e) {
                 System.err.println("Failed to get the any address, please try again or specify the address manually");
                 e.printStackTrace();
