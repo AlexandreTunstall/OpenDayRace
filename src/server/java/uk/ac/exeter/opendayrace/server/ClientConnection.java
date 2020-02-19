@@ -2,6 +2,7 @@ package uk.ac.exeter.opendayrace.server;
 
 import uk.ac.exeter.opendayrace.common.world.WorldPath;
 
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
@@ -45,8 +46,8 @@ public class ClientConnection implements AutoCloseable {
     }
 
     private void parseVersion() {
-        byte clientVersion = readBuffer.get();
-        byte clientVersionEnd = readBuffer.get();
+        byte clientVersion = getByte();
+        byte clientVersionEnd = getByte();
         if (clientVersion != VERSION || clientVersionEnd != VERSION_END) {
             System.out.println("Client version is incompatible, expected {" + VERSION + ", " + VERSION_END
                     + "} got {" + clientVersion + ", " + VERSION_END + "}");
@@ -57,7 +58,7 @@ public class ClientConnection implements AutoCloseable {
     }
 
     private void parseSelection() {
-        switch (readBuffer.get()) {
+        switch (getByte()) {
             case PATH_LEFT_LEFT:
                 selectedPath = WorldPath.LEFT_LEFT;
                 break;
@@ -101,6 +102,16 @@ public class ClientConnection implements AutoCloseable {
         } catch (Exception e) {
             System.err.println("Caught exception when closing client connection");
             e.printStackTrace();
+        }
+    }
+
+    private byte getByte() {
+        try {
+            return readBuffer.get();
+        } catch (BufferUnderflowException e) {
+            System.err.println("Caught BufferUnderflowException");
+            closeSafe();
+            throw e;
         }
     }
 
